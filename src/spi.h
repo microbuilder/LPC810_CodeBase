@@ -41,8 +41,6 @@ extern "C" {
 #endif
 
 #include "LPC8xx.h"
-#include "errors.h"
-#include "asserts.h"
 
 #define SPI_CFG_ENABLE          (1 << 0)
 #define SPI_CFG_MASTER          (1 << 2)

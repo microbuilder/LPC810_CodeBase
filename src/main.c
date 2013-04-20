@@ -36,6 +36,7 @@
 #include "LPC8xx.h"
 #include "gpio.h"
 #include "mrt.h"
+#include "uart.h"
 
 #if defined(__CODE_RED)
   #include <cr_section_macros.h>
@@ -43,35 +44,50 @@
   __CRP const unsigned int CRP_WORD = CRP_NO_CRP ;
 #endif
 
-#define LED_LOCATION    (3)   /* LED is on pin 0.3 */
+#define LED_LOCATION    (2)
 
 void configurePins()
 {
   /* Enable SWM clock */
-  LPC_SYSCON->SYSAHBCLKCTRL |= (1<<7);
+  LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 7);
 
-  /* Set everything to GPIO in the switch matrix           */
-  /* This will also turn off the SWD pins and the external */
-  /* crystal inputs (XTAL) since we need these pins for    */
-  /* general GPIO use.                                     */
+  /* Pin setup generated via Switch Matrix Tool
+     ------------------------------------------
+     PIO0_5 = RESET
+     PIO0_4 = U0_TXD
+     PIO0_3 = GPIO
+     PIO0_2 = GPIO (User LED)
+     PIO0_1 = GPIO
+     PIO0_0 = U0_RXD
+     ------------------------------------------
+     NOTE: SWD is disabled to free GPIO pins!
+     ------------------------------------------ */
+
+  /* Pin Assign 8 bit Configuration */
+  /* U0_TXD */
+  /* U0_RXD */
+  LPC_SWM->PINASSIGN0 = 0xffff0004UL;
+
+  /* Pin Assign 1 bit Configuration */
   LPC_SWM->PINENABLE0 = 0xffffffffUL;
-
-  /* Pin I/O Configuration (internal resistors, hysteresis, etc.) */
-  /* Default = pull-up resistor enabled (0x90) */
-  /* LPC_IOCON->PIO0_0 = 0x90; */
-  /* LPC_IOCON->PIO0_1 = 0x90; */
-  /* LPC_IOCON->PIO0_2 = 0x90; */
-  /* LPC_IOCON->PIO0_3 = 0x90; */
-  /* LPC_IOCON->PIO0_4 = 0x90; */
-  /* LPC_IOCON->PIO0_5 = 0x90; */
 }
 
 int main(void)
 {
-  SystemCoreClockUpdate();        /* Configure the core clock/PLL */
-  gpioInit();                     /* Initialise the GPIO block */
-  mrtInit(SystemCoreClock/1000);  /* Configure the multi-rate timer for 1ms ticks */
-  configurePins();                /* Configure the switch matrix */
+  /* Configure the core clock/PLL via CMSIS */
+  SystemCoreClockUpdate();
+
+  /* Initialise the GPIO block */
+  gpioInit();
+
+  /* Initialise the UART0 block for printf output */
+  // uart0Init(115200);
+
+  /* Configure the multi-rate timer for 1ms ticks */
+  mrtInit(SystemCoreClock/1000);
+
+  /* Configure the switch matrix (setup pins for UART0 and GPIO) */
+  configurePins();
 
   /* Set the LED pin to output (1 = output, 0 = input) */
   LPC_GPIO_PORT->DIR0 |= (1 << LED_LOCATION);
@@ -81,8 +97,12 @@ int main(void)
     /* Turn LED Off by setting the GPIO pin high */
     LPC_GPIO_PORT->SET0 = 1 << LED_LOCATION;
     mrtDelay(500);
+
     /* Turn LED On by setting the GPIO pin low */
     LPC_GPIO_PORT->CLR0 = 1 << LED_LOCATION;
     mrtDelay(500);
+
+    /* Send some text (printf is redirected to UART0) */
+    // printf("Hello, LPC810!\n");
   }
 }

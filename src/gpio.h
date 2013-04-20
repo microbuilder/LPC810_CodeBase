@@ -41,8 +41,6 @@ extern "C" {
 #endif
 
 #include "LPC8xx.h"
-#include "errors.h"
-#include "asserts.h"
 
 void     gpioInit(void);
 uint32_t gpioGetPinValue (uint32_t port, uint32_t pin);

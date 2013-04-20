@@ -1,8 +1,7 @@
 /**************************************************************************/
 /*!
-    @file     errors.h
+    @file     uart.c
     @author   K. Townsend
-    @brief    Global error codes for centralised error handling
 
     @section LICENSE
 
@@ -34,28 +33,52 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef _ERRORS_H_
-#define _ERRORS_H_
+#include <string.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "uart.h"
 
-/**************************************************************************/
-/*!
-    Common error messages used across the system
-*/
-/**************************************************************************/
-typedef enum
+void uart0Init(uint32_t baudRate)
 {
-  ERROR_NONE                    = 0x0,      /**< Indicates no error occurred */
-  ERROR_OPERATIONTIMEDOUT       = 0x1,      /**< Operation timed out before completion */
-  ERROR_INVALIDPARAMETER        = 0x2,      /**< An invalid parameter value was provided */
-  ERROR_DEVICENOTINITIALISED    = 0x3       /**< Attemping to execute a function on an unitialised peripheral */
-} error_t;
+  uint32_t clk;
 
-#ifdef __cplusplus
+  /* Setup the clock and reset UART0 */
+  LPC_SYSCON->UARTCLKDIV = 1;
+  NVIC_DisableIRQ(UART0_IRQn);
+  LPC_SYSCON->SYSAHBCLKCTRL |=  (1 << 14);
+  LPC_SYSCON->PRESETCTRL    &= ~(1 << 3);
+  LPC_SYSCON->PRESETCTRL    |=  (1 << 3);
+
+  /* Configure UART0 */
+  clk = SystemCoreClock/LPC_SYSCON->UARTCLKDIV;
+  LPC_USART0->CFG = UART_DATA_LENGTH_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
+  LPC_USART0->BRG = clk / 16 / baudRate - 1;
+  LPC_SYSCON->UARTFRGDIV = 0xFF;
+  LPC_SYSCON->UARTFRGMULT = (((clk / 16) * (LPC_SYSCON->UARTFRGDIV + 1)) /
+    (baudRate * (LPC_USART0->BRG + 1))) - (LPC_SYSCON->UARTFRGDIV + 1);
+
+  /* Clear the status bits */
+  LPC_USART0->STAT = UART_STATUS_CTSDEL | UART_STATUS_RXBRKDEL;
+
+  /* Enable UART0 interrupt */
+  NVIC_EnableIRQ(UART0_IRQn);
+
+  /* Enable UART0 */
+  LPC_USART0->CFG |= UART_ENABLE;
 }
-#endif
 
-#endif
+void uart0SendChar(char buffer)
+{
+  /* Wait until we're ready to send */
+  while (!(LPC_USART0->STAT & UART_STATUS_TXRDY));
+  LPC_USART0->TXDATA = buffer;
+}
+
+void uart0Send(char *buffer, uint32_t length)
+{
+  while (length != 0)
+  {
+    uart0SendChar(*buffer);
+    buffer++;
+    length--;
+  }
+}
