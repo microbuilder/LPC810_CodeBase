@@ -76,7 +76,7 @@ void configurePins()
        ------------------------------------------------
        NOTE: SWD is disabled to free GPIO pins!
        ------------------------------------------------ */
-    LPC_SWM->PINENABLE0 = 0xffffffffUL;
+    LPC_SWM->PINENABLE0 = 0xffffffbfUL;
   #else
     /* Pin setup generated via Switch Matrix Tool
        ------------------------------------------------
@@ -89,7 +89,7 @@ void configurePins()
        ------------------------------------------------
        NOTE: LED on PIO0_2 unavailable due to SWDIO!
        ------------------------------------------------ */
-    LPC_SWM->PINENABLE0 = 0xfffffff3UL;   
+    LPC_SWM->PINENABLE0 = 0xffffffb3UL;   
   #endif  
 }
 
