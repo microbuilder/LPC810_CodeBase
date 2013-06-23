@@ -148,12 +148,12 @@ void SystemInit (void) {
   LPC_SWM->PINENABLE0 &= ~(0x3 << 4);
   LPC_SYSCON->PDRUNCFG     &= ~(0x1 << 5);        /* Power-up System Osc      */
   LPC_SYSCON->SYSOSCCTRL    = SYSOSCCTRL_Val;
-  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient wait loop
+  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient delay loop
 #endif
 #if ((SYSPLLCLKSEL_Val & 0x03) == 3)
   LPC_IOCON->PIO0_1 &= ~(0x3 << 3);
   LPC_SWM->PINENABLE0 &= ~(0x1 << 7);
-  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient wait loop
+  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient delay loop
 #endif
 
   LPC_SYSCON->SYSPLLCLKSEL  = SYSPLLCLKSEL_Val;   /* Select PLL Input         */
@@ -168,7 +168,7 @@ void SystemInit (void) {
 #if (((MAINCLKSEL_Val & 0x03) == 2) )
   LPC_SYSCON->WDTOSCCTRL    = WDTOSCCTRL_Val;
   LPC_SYSCON->PDRUNCFG     &= ~(0x1 << 6);        /* Power-up WDT Clock       */
-  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient wait loop
+  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient delay loop
 #endif
 
   LPC_SYSCON->MAINCLKSEL    = MAINCLKSEL_Val;     /* Select PLL Clock Output  */
