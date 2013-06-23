@@ -132,8 +132,13 @@ void (* const g_pfnVectors[])(void) = {
 // are written as separate functions rather than being inlined within the
 // ResetISR() function in order to cope with MCUs with multiple banks of
 // memory.
+//
+// cpldcpu 2013/06/23 - modified to always inline since the LPC81X does not have
+//						multiple memory banks. Saves 16 bytes.
+//
 //*****************************************************************************
-__attribute__ ((section(".after_vectors")))
+//__attribute__ ((section(".after_vectors")))
+__attribute__((always_inline))
 void data_init(unsigned int romstart, unsigned int start, unsigned int len) {
 	unsigned int *pulDest = (unsigned int*) start;
 	unsigned int *pulSrc = (unsigned int*) romstart;
@@ -142,7 +147,8 @@ void data_init(unsigned int romstart, unsigned int start, unsigned int len) {
 		*pulDest++ = *pulSrc++;
 }
 
-__attribute__ ((section(".after_vectors")))
+//__attribute__ ((section(".after_vectors")))
+__attribute__((always_inline))
 void bss_init(unsigned int start, unsigned int len) {
 	unsigned int *pulDest = (unsigned int*) start;
 	unsigned int loop;
