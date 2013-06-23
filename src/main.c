@@ -56,7 +56,7 @@
 void configurePins()
 {
   /* Enable SWM clock */
-  LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 7);
+	//  LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 7);  // this is already done in SystemInit()
 
   /* Pin Assign 8 bit Configuration */
   /* U0_TXD */
@@ -96,7 +96,7 @@ void configurePins()
 int main(void)
 {
   /* Configure the core clock/PLL via CMSIS */
-  SystemCoreClockUpdate();
+  SystemInit();
 
   /* Initialise the GPIO block */
   gpioInit();
@@ -131,6 +131,6 @@ int main(void)
     #endif
 
     /* Send some text (printf is redirected to UART0) */
-    printf("Hello, LPC810!\n");
+    printf("Hello, LPC810!\n\r");
   }
 }
