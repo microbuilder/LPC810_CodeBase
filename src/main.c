@@ -96,7 +96,7 @@ void configurePins()
 int main(void)
 {
   /* Configure the core clock/PLL via CMSIS */
-  SystemInit();
+  // SystemInit(); // This is already called in cr_startup
 
   /* Initialise the GPIO block */
   gpioInit();
