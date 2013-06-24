@@ -123,10 +123,11 @@ __attribute__((always_inline)) void __delayticks(unsigned int ticks);
 // </e>
 */
 
-// 30 MHz main clock via PLL and internal RC oscillator
+// 20 MHz main clock via PLL and internal RC oscillator
+// This is the maximum CPU clock frequency at zero waitstate flash access.
 //
 // PLL is set to 60 MHz
-// AHBClkdiv divides the clock by 2
+// AHBClkdiv divides the clock by 3
 
 #define CLOCK_SETUP           1
 #define SYSOSCCTRL_Val        0x00000000              // Reset: 0x000
@@ -134,7 +135,7 @@ __attribute__((always_inline)) void __delayticks(unsigned int ticks);
 #define SYSPLLCTRL_Val        0x00000024              // Reset: 0x000
 #define SYSPLLCLKSEL_Val      0x00000000              // Reset: 0x000
 #define MAINCLKSEL_Val        0x00000003              // Reset: 0x000
-#define SYSAHBCLKDIV_Val      0x00000002              // Reset: 0x001
+#define SYSAHBCLKDIV_Val      0x00000003              // Reset: 0x001
 
 
 
@@ -267,8 +268,6 @@ __attribute__((always_inline)) void __delayticks(unsigned int ticks);
 #else
 	#define SystemCoreClock (__SYSTEM_CLOCK)     // Use fixed value for SystemCoreClock
 #endif
-
-
 
 /**
  * Initialize the system
