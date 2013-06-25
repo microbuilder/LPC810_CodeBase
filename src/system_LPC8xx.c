@@ -24,24 +24,10 @@
 
 #include "system_LPC8xx.h"
 
-// cpldcpu - added 2013/06/23
-// Delays by 3*ticks cycles
-__attribute__((always_inline)) void __delayticks(unsigned int ticks) {
-  	asm volatile(
-  			"loop%=: sub %[ctr],#1	\n"
-  			"		 bne loop%=\n"
-  			: [ctr] "+r" (ticks)
-  			);
-}
-
-
-#ifdef __USE_DYNAMIC_CLOCK
-
 /*----------------------------------------------------------------------------
   Clock Variable definitions
  *----------------------------------------------------------------------------*/
 uint32_t SystemCoreClock = __SYSTEM_CLOCK;/*!< System Clock Frequency (Core Clock)*/
-
 
 /*----------------------------------------------------------------------------
   Clock functions
@@ -116,14 +102,16 @@ void SystemCoreClockUpdate (void)            /* Get Core Clock Frequency      */
 
 }
 
-#else
-	// if no dynamic clocks are used, SystemCoreClock is a constant and can not be updated.
-	void SystemCoreClockUpdate (void)
-	{
 
+	// cpldcpu - added 2013/06/23
+	// Delays by 3*ticks cycles
+	__attribute__((always_inline)) void __delayticks(unsigned int ticks) {
+	  	asm volatile(
+	  			"loop%=: sub %[ctr],#1	\n"
+	  			"		 bne loop%=\n"
+	  			: [ctr] "+r" (ticks)
+	  			);
 	}
-#endif
-
 
 
 /**
