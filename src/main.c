@@ -95,9 +95,6 @@ void configurePins()
 
 int main(void)
 {
-  /* Configure the core clock/PLL via CMSIS */
-  SystemInit();
-
   /* Initialise the GPIO block */
   gpioInit();
 
@@ -105,7 +102,7 @@ int main(void)
   uart0Init(115200);
 
   /* Configure the multi-rate timer for 1ms ticks */
-  mrtInit(SystemCoreClock/1000);
+  mrtInit(__SYSTEM_CLOCK/1000);
 
   /* Configure the switch matrix (setup pins for UART0 and GPIO) */
   configurePins();

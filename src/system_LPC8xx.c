@@ -24,24 +24,10 @@
 
 #include "system_LPC8xx.h"
 
-// cpldcpu - added 2013/06/23
-// Delays by 3*ticks cycles
-__attribute__((always_inline)) void __delayticks(unsigned int ticks) {
-  	asm volatile(
-  			"loop%=: sub %[ctr],#1	\n"
-  			"		 bne loop%=\n"
-  			: [ctr] "+r" (ticks)
-  			);
-}
-
-
-#ifdef __USE_DYNAMIC_CLOCK
-
 /*----------------------------------------------------------------------------
   Clock Variable definitions
  *----------------------------------------------------------------------------*/
 uint32_t SystemCoreClock = __SYSTEM_CLOCK;/*!< System Clock Frequency (Core Clock)*/
-
 
 /*----------------------------------------------------------------------------
   Clock functions
@@ -116,14 +102,16 @@ void SystemCoreClockUpdate (void)            /* Get Core Clock Frequency      */
 
 }
 
-#else
-	// if no dynamic clocks are used, SystemCoreClock is a constant and can not be updated.
-	void SystemCoreClockUpdate (void)
-	{
 
+	// cpldcpu - added 2013/06/23
+	// Delays by 3*ticks cycles
+	__attribute__((always_inline)) void __delayticks(unsigned int ticks) {
+	  	asm volatile(
+	  			"loop%=: sub %[ctr],#1	\n"
+	  			"		 bne loop%=\n"
+	  			: [ctr] "+r" (ticks)
+	  			);
 	}
-#endif
-
 
 
 /**
@@ -148,12 +136,12 @@ void SystemInit (void) {
   LPC_SWM->PINENABLE0 &= ~(0x3 << 4);
   LPC_SYSCON->PDRUNCFG     &= ~(0x1 << 5);        /* Power-up System Osc      */
   LPC_SYSCON->SYSOSCCTRL    = SYSOSCCTRL_Val;
-  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient wait loop
+  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient delay loop
 #endif
 #if ((SYSPLLCLKSEL_Val & 0x03) == 3)
   LPC_IOCON->PIO0_1 &= ~(0x3 << 3);
   LPC_SWM->PINENABLE0 &= ~(0x1 << 7);
-  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient wait loop
+  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient delay loop
 #endif
 
   LPC_SYSCON->SYSPLLCLKSEL  = SYSPLLCLKSEL_Val;   /* Select PLL Input         */
@@ -168,7 +156,7 @@ void SystemInit (void) {
 #if (((MAINCLKSEL_Val & 0x03) == 2) )
   LPC_SYSCON->WDTOSCCTRL    = WDTOSCCTRL_Val;
   LPC_SYSCON->PDRUNCFG     &= ~(0x1 << 6);        /* Power-up WDT Clock       */
-  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient wait loop
+  __delayticks(1024); 			// cpldcpu 2013/06/23 replaced inefficient delay loop
 #endif
 
   LPC_SYSCON->MAINCLKSEL    = MAINCLKSEL_Val;     /* Select PLL Clock Output  */
@@ -176,5 +164,10 @@ void SystemInit (void) {
   while (!(LPC_SYSCON->MAINCLKUEN & 0x01));       /* Wait Until Updated       */
 
   LPC_SYSCON->SYSAHBCLKDIV  = SYSAHBCLKDIV_Val;
+
+#if __SYSTEM_CLOCK <= 20000000
+  LPC_FLASHCTRL->FLASHCFG=0;		/* Set flash waitstates to zero if core clock is <=20 Mhz. Default is 1 waitstate */
+#endif
+
 #endif
 }
