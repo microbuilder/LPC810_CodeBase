@@ -165,7 +165,7 @@ void SystemInit (void) {
 
   LPC_SYSCON->SYSAHBCLKDIV  = SYSAHBCLKDIV_Val;
 
-#if __SYSTEM_CLOCK <= 20000000
+#if __SYSTEM_CLOCK <= 30000000
   LPC_FLASHCTRL->FLASHCFG=0;		/* Set flash waitstates to zero if core clock is <=20 Mhz. Default is 1 waitstate */
 #endif
 
