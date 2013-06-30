@@ -112,11 +112,12 @@ __attribute__((always_inline)) void __delayticks(unsigned int ticks);
 // </e>
 */
 
-// 20 MHz main clock via PLL and internal RC oscillator
-// This is the maximum CPU clock frequency at zero waitstate flash access.
+// 30 MHz main clock via PLL and internal RC oscillator
+// According to the NXP tech support to access time of the internal flash
+// is 24ns and zero waitstate access is still possible at 30 Mhz.
 //
 // PLL is set to 60 MHz
-// AHBClkdiv divides the clock by 3
+// AHBClkdiv divides the clock by 2
 
 #define CLOCK_SETUP           1
 #define SYSOSCCTRL_Val        0x00000000              // Reset: 0x000
@@ -124,7 +125,7 @@ __attribute__((always_inline)) void __delayticks(unsigned int ticks);
 #define SYSPLLCTRL_Val        0x00000024              // Reset: 0x000
 #define SYSPLLCLKSEL_Val      0x00000000              // Reset: 0x000
 #define MAINCLKSEL_Val        0x00000003              // Reset: 0x000
-#define SYSAHBCLKDIV_Val      0x00000003              // Reset: 0x001
+#define SYSAHBCLKDIV_Val      0x00000002              // Reset: 0x001
 
 
 
