@@ -12,7 +12,7 @@ FPU = # -mfloat-abi=soft
 FILENAME = blinky
 LINKERSCRIPT = blinky.ld
 
-CFLAGS+= -Os -ffunction-sections -fdata-sections --specs=nano.specs
+CFLAGS+= -Os --specs=nano.specs -ffunction-sections -fdata-sections -fno-builtin
 
 CC = ${CROSS}gcc
 LD = ${CROSS}ld
