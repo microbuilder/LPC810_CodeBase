@@ -30,9 +30,6 @@ extern "C" {
 
 #include <stdint.h>
 
-// Delays by 3*ticks cycles
-__attribute__((always_inline)) void __delayticks(unsigned int ticks);
-
 /*
 //-------- <<< Use Configuration Wizard in Context Menu >>> ------------------
 */
