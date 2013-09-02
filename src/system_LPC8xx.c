@@ -105,7 +105,8 @@ void SystemCoreClockUpdate (void)            /* Get Core Clock Frequency      */
 
 	// cpldcpu - added 2013/06/23
 	// Delays by 3*ticks cycles
-	__attribute__((always_inline)) void __delayticks(unsigned int ticks) {
+	__attribute__((always_inline))
+	static inline void __delayticks(unsigned int ticks) {
 	  	asm volatile(
 	  			"loop%=: sub %[ctr],#1	\n"
 	  			"		 bne loop%=\n"
