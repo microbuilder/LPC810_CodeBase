@@ -21,10 +21,11 @@ SECTIONS
         KEEP(*(.after_vectors))
         *(.text*)
         *(.rodata*)
+        . = ALIGN(4);
         _etext = .;
     } > FLASH
 
-    .data : AT (ADDR(.text) + SIZEOF(.text))
+    .data : AT (_etext)
     {
         _data = .;
         *(vtable)
