@@ -33,6 +33,14 @@
 */
 
 /**************************************************************************/
+
+/*
+    @info
+    setup SCT as 32bit timer.
+    generate PWM depending on match0 (period) and match1 (duty cycle) register.
+    using pio0_2 to flash led.
+ */
+
 #include <stdio.h>
 #include "LPC8xx.h"
 #include "gpio.h"
