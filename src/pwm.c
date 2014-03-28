@@ -102,7 +102,12 @@ sct_fsm_init (void)
   LPC_SCT->EVEN =    0x00000000;
 }
 
-#if 1
+#if 0
+
+//
+// To activate the pwm main() function you need to rename
+//  the main() in main.c
+//
 
 int
 main(void)
