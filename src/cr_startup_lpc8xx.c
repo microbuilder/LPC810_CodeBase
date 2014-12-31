@@ -77,7 +77,27 @@ WEAK void IntDefaultHandler(void);
 // precedence over these weak definitions
 //
 //*****************************************************************************
-void SPI0_IRQHandler(void) ALIAS(IntDefaultHandler);void SPI1_IRQHandler(void) ALIAS(IntDefaultHandler);void UART0_IRQHandler(void) ALIAS(IntDefaultHandler);void UART1_IRQHandler(void) ALIAS(IntDefaultHandler);void UART2_IRQHandler(void) ALIAS(IntDefaultHandler);void I2C_IRQHandler(void) ALIAS(IntDefaultHandler);void SCT_IRQHandler(void) ALIAS(IntDefaultHandler);void MRT_IRQHandler(void) ALIAS(IntDefaultHandler);void CMP_IRQHandler(void) ALIAS(IntDefaultHandler);void WDT_IRQHandler(void) ALIAS(IntDefaultHandler);void BOD_IRQHandler(void) ALIAS(IntDefaultHandler);void WKT_IRQHandler(void) ALIAS(IntDefaultHandler);void PININT0_IRQHandler(void) ALIAS(IntDefaultHandler);void PININT1_IRQHandler(void) ALIAS(IntDefaultHandler);void PININT2_IRQHandler(void) ALIAS(IntDefaultHandler);void PININT3_IRQHandler(void) ALIAS(IntDefaultHandler);void PININT4_IRQHandler(void) ALIAS(IntDefaultHandler);void PININT5_IRQHandler(void) ALIAS(IntDefaultHandler);void PININT6_IRQHandler(void) ALIAS(IntDefaultHandler);void PININT7_IRQHandler(void) ALIAS(IntDefaultHandler);//*****************************************************************************
+void SPI0_IRQHandler(void) ALIAS(IntDefaultHandler);
+void SPI1_IRQHandler(void) ALIAS(IntDefaultHandler);
+void UART0_IRQHandler(void) ALIAS(IntDefaultHandler);
+void UART1_IRQHandler(void) ALIAS(IntDefaultHandler);
+void UART2_IRQHandler(void) ALIAS(IntDefaultHandler);
+void I2C_IRQHandler(void) ALIAS(IntDefaultHandler);
+void SCT_IRQHandler(void) ALIAS(IntDefaultHandler);
+void MRT_IRQHandler(void) ALIAS(IntDefaultHandler);
+void CMP_IRQHandler(void) ALIAS(IntDefaultHandler);
+void WDT_IRQHandler(void) ALIAS(IntDefaultHandler);
+void BOD_IRQHandler(void) ALIAS(IntDefaultHandler);
+void WKT_IRQHandler(void) ALIAS(IntDefaultHandler);
+void PININT0_IRQHandler(void) ALIAS(IntDefaultHandler);
+void PININT1_IRQHandler(void) ALIAS(IntDefaultHandler);
+void PININT2_IRQHandler(void) ALIAS(IntDefaultHandler);
+void PININT3_IRQHandler(void) ALIAS(IntDefaultHandler);
+void PININT4_IRQHandler(void) ALIAS(IntDefaultHandler);
+void PININT5_IRQHandler(void) ALIAS(IntDefaultHandler);
+void PININT6_IRQHandler(void) ALIAS(IntDefaultHandler);
+void PININT7_IRQHandler(void) ALIAS(IntDefaultHandler);
+//*****************************************************************************
 //
 // The entry point for the application.
 // __main() is the entry point for Redlib based applications
@@ -127,7 +147,42 @@ void (* const g_pfnVectors[])(void) = {
 	SysTick_Handler,						// The SysTick handler
 
 	// Chip Level - LPC8xx
-    SPI0_IRQHandler,                         // SPI0 controller    SPI1_IRQHandler,                         // SPI1 controller    0,                                       // Reserved    UART0_IRQHandler,                        // UART0    UART1_IRQHandler,                        // UART1    UART2_IRQHandler,                        // UART2    0,                                       // Reserved    0,                                       // Reserved    I2C_IRQHandler,                          // I2C controller    SCT_IRQHandler,                          // Smart Counter Timer    MRT_IRQHandler,                          // Multi-Rate Timer    CMP_IRQHandler,                          // Comparator    WDT_IRQHandler,                          // PIO1 (0:11)    BOD_IRQHandler,                          // Brown Out Detect    0,                                       // Reserved    WKT_IRQHandler,                          // Wakeup timer    0,                                       // Reserved    0,                                       // Reserved    0,                                       // Reserved    0,                                       // Reserved    0,                                       // Reserved    0,                                       // Reserved    0,                                       // Reserved    0,                                       // Reserved    PININT0_IRQHandler,                      // PIO INT0    PININT1_IRQHandler,                      // PIO INT1    PININT2_IRQHandler,                      // PIO INT2    PININT3_IRQHandler,                      // PIO INT3    PININT4_IRQHandler,                      // PIO INT4    PININT5_IRQHandler,                      // PIO INT5    PININT6_IRQHandler,                      // PIO INT6    PININT7_IRQHandler,                      // PIO INT7}; /* End of g_pfnVectors */ //*****************************************************************************
+    SPI0_IRQHandler,                         // SPI0 controller
+    SPI1_IRQHandler,                         // SPI1 controller
+    0,                                       // Reserved
+    UART0_IRQHandler,                        // UART0
+    UART1_IRQHandler,                        // UART1
+    UART2_IRQHandler,                        // UART2
+    0,                                       // Reserved
+    0,                                       // Reserved
+    I2C_IRQHandler,                          // I2C controller
+    SCT_IRQHandler,                          // Smart Counter Timer
+    MRT_IRQHandler,                          // Multi-Rate Timer
+    CMP_IRQHandler,                          // Comparator
+    WDT_IRQHandler,                          // PIO1 (0:11)
+    BOD_IRQHandler,                          // Brown Out Detect
+    0,                                       // Reserved
+    WKT_IRQHandler,                          // Wakeup timer
+    0,                                       // Reserved
+    0,                                       // Reserved
+    0,                                       // Reserved
+    0,                                       // Reserved
+    0,                                       // Reserved
+    0,                                       // Reserved
+    0,                                       // Reserved
+    0,                                       // Reserved
+    PININT0_IRQHandler,                      // PIO INT0
+    PININT1_IRQHandler,                      // PIO INT1
+    PININT2_IRQHandler,                      // PIO INT2
+    PININT3_IRQHandler,                      // PIO INT3
+    PININT4_IRQHandler,                      // PIO INT4
+    PININT5_IRQHandler,                      // PIO INT5
+    PININT6_IRQHandler,                      // PIO INT6
+    PININT7_IRQHandler,                      // PIO INT7
+
+}; /* End of g_pfnVectors */ 
+
+//*****************************************************************************
 // Functions to carry out the initialization of RW and BSS data sections. These
 // are written as separate functions rather than being inlined within the
 // ResetISR() function in order to cope with MCUs with multiple banks of
@@ -246,7 +301,7 @@ void HardFault_Handler(void)
     }
 }
 __attribute__ ((section(".after_vectors")))
-void SVCall_Handler(void)
+void SVC_Handler(void)
 {
     while(1)
     {
