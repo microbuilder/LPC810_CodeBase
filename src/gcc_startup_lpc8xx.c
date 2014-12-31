@@ -197,7 +197,7 @@ void HardFault_Handler(void)
     }
 }
 __attribute__ ((section(".after_vectors")))
-void SVCall_Handler(void)
+void SVC_Handler(void)
 {
     while(1)
     {
