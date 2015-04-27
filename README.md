@@ -1,5 +1,4 @@
-LPC810_CodeBase
-===============
+# LPC810 CodeBase
 
 Open source code base for the ARM Cortex M0+ LPC810 family from NXP.
 
@@ -13,3 +12,29 @@ The current code implements the following peripheral drivers:
 - A basic multi-rate timer driver that allows us to set delays
 
 The code base also implements a mini printf that takes up much less space than the default printf used in most libc variants.  If necessary, it's easy to change the printf redirection to a location other than UART0 via the printf-redirection.c file.
+
+# Using the Makefile
+
+If you wish to use 'make' from the command-line, you can run the following commands:
+
+- `make clean` - Removes and files from a previous build process, giving you a clean start next time you run `make all`
+- `make all` - Builds the entire project
+- `make flash` - TBD
+
+## Common 'Make' Errors
+
+### make: arm-none-eabi-gcc: No such file or directory
+
+If you get this error, you need to add the '/bin' folder of your toolchain to your 'system path' variable.
+
+On OS X or Linux this can be done with the following command ([GCC ARM Embedded 2014 Q2](https://launchpad.net/gcc-arm-embedded/4.8/4.8-2014-q2-update) used below, stored in the user's `/Downloads` folder):
+
+```
+export PATH=$HOME/Downloads/gcc-arm-none-eabi-4_8-2014q2/bin:$PATH
+```
+
+You can test if GCC is available on the system path by running the following command:
+
+```
+arm-none-eabi-gcc --version
+```
