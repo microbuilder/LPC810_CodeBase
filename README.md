@@ -17,9 +17,8 @@ The code base also implements a mini printf that takes up much less space than t
 
 If you wish to use 'make' from the command-line, you can run the following commands:
 
-- `make clean` - Removes and files from a previous build process, giving you a clean start next time you run `make all`
-- `make all` - Builds the entire project
-- `make flash` - TBD
+- `make clean`
+- `make all`
 
 ## Common 'Make' Errors
 
