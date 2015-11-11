@@ -124,7 +124,7 @@ void uart1SendChar(char buffer)
 void uart1Send(char *buffer, uint32_t length)
 {
   while (length != 0) {
-    uart1_snd_chr(*buffer);
+    uart1SendChar(*buffer);
     buffer++;
     length--;
   }
@@ -171,7 +171,7 @@ void uart2SendChar(char buffer)
 void uart2Send(char *buffer, uint32_t length)
 {
   while (length != 0) {
-    uart2_snd_chr(*buffer);
+    uart2SendChar(*buffer);
     buffer++;
     length--;
   }
