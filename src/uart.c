@@ -137,7 +137,7 @@ void uart2Init(uint32_t baudRate)
 
   /* Setup the clock and reset UART2 */
   LPC_SYSCON->UARTCLKDIV = UARTCLKDIV;
-  NVIC_DisableIRQ(UART1_IRQn);
+  NVIC_DisableIRQ(UART2_IRQn);
 
   LPC_SYSCON->SYSAHBCLKCTRL |=  UART2_CLK_ENABLE;
   LPC_SYSCON->PRESETCTRL    &= ~UART2_RST_N;
@@ -155,7 +155,7 @@ void uart2Init(uint32_t baudRate)
   LPC_USART2->STAT = UART_STATUS_CTSDEL | UART_STATUS_RXBRKDEL;
 
   /* Enable UART1 interrupt */
-  NVIC_EnableIRQ(UART1_IRQn);
+  NVIC_EnableIRQ(UART2_IRQn);
 
   /* Enable UART2 */
   LPC_USART2->CFG |= UART_ENABLE;
