@@ -83,3 +83,96 @@ void uart0Send(char *buffer, uint32_t length)
     length--;
   }
 }
+
+void uart1Init(uint32_t baudRate)
+{
+  uint32_t clk;
+  const uint32_t UARTCLKDIV=1;
+
+  /* Setup the clock and reset UART1 */
+  LPC_SYSCON->UARTCLKDIV = UARTCLKDIV;
+  NVIC_DisableIRQ(UART1_IRQn);
+
+  LPC_SYSCON->SYSAHBCLKCTRL |=  UART1_CLK_ENABLE;
+  LPC_SYSCON->PRESETCTRL    &= ~UART1_RST_N;
+  LPC_SYSCON->PRESETCTRL    |=  UART1_RST_N;
+
+  /* Configure UART1 */
+  clk = __MAIN_CLOCK/UARTCLKDIV;
+  LPC_USART1->CFG = UART_DATA_LENGTH_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
+  LPC_USART1->BRG = clk / 16 / baudRate - 1;
+  LPC_SYSCON->UARTFRGDIV = 0xFF;
+  LPC_SYSCON->UARTFRGMULT = (((clk / 16) * (LPC_SYSCON->UARTFRGDIV + 1)) /
+    (baudRate * (LPC_USART0->BRG + 1))) - (LPC_SYSCON->UARTFRGDIV + 1);
+
+  /* Clear the status bits */
+  LPC_USART1->STAT = UART_STATUS_CTSDEL | UART_STATUS_RXBRKDEL;
+
+  /* Enable UART1 interrupt */
+  NVIC_EnableIRQ(UART1_IRQn);
+  /* Enable UART1 */
+  LPC_USART1->CFG |= UART_ENABLE;
+}
+
+void uart1SendChar(char buffer)
+{
+  /* Wait until we're ready to send */
+  while (!(LPC_USART1->STAT & UART_STATUS_TXRDY));
+  LPC_USART1->TXDATA = buffer;
+}
+
+void uart1Send(char *buffer, uint32_t length)
+{
+  while (length != 0) {
+    uart1_snd_chr(*buffer);
+    buffer++;
+    length--;
+  }
+}
+
+void uart2Init(uint32_t baudRate)
+{
+  uint32_t clk;
+  const uint32_t UARTCLKDIV=1;
+
+  /* Setup the clock and reset UART2 */
+  LPC_SYSCON->UARTCLKDIV = UARTCLKDIV;
+  NVIC_DisableIRQ(UART1_IRQn);
+
+  LPC_SYSCON->SYSAHBCLKCTRL |=  UART2_CLK_ENABLE;
+  LPC_SYSCON->PRESETCTRL    &= ~UART2_RST_N;
+  LPC_SYSCON->PRESETCTRL    |=  UART2_RST_N;
+
+  /* Configure UART2 */
+  clk = __MAIN_CLOCK/UARTCLKDIV;
+  LPC_USART2->CFG = UART_DATA_LENGTH_8 | UART_PARITY_NONE | UART_STOP_BIT_1;
+  LPC_USART2->BRG = clk / 16 / baudRate - 1;
+  LPC_SYSCON->UARTFRGDIV = 0xFF;
+  LPC_SYSCON->UARTFRGMULT = (((clk / 16) * (LPC_SYSCON->UARTFRGDIV + 1)) /
+    (baudRate * (LPC_USART0->BRG + 1))) - (LPC_SYSCON->UARTFRGDIV + 1);
+
+  /* Clear the status bits */
+  LPC_USART2->STAT = UART_STATUS_CTSDEL | UART_STATUS_RXBRKDEL;
+
+  /* Enable UART1 interrupt */
+  NVIC_EnableIRQ(UART1_IRQn);
+
+  /* Enable UART2 */
+  LPC_USART2->CFG |= UART_ENABLE;
+}
+
+void uart2SendChar(char buffer)
+{
+  /* Wait until we're ready to send */
+  while (!(LPC_USART2->STAT & UART_STATUS_TXRDY));
+  LPC_USART2->TXDATA = buffer;
+}
+
+void uart2Send(char *buffer, uint32_t length)
+{
+  while (length != 0) {
+    uart2_snd_chr(*buffer);
+    buffer++;
+    length--;
+  }
+}
