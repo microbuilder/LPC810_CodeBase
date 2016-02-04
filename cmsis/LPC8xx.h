@@ -378,7 +378,7 @@ __IO uint32_t STAT;
 
 typedef struct {
   MRT_Channel_cfg_Type Channel[4]; 		
-   uint32_t Reserved0[1]; 				
+   uint32_t Reserved0[45]; 				
   __IO uint32_t IDLE_CH; 			
   __IO uint32_t IRQ_FLAG; 						
 } LPC_MRT_TypeDef;
