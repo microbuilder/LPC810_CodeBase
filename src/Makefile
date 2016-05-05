@@ -20,9 +20,9 @@ OBJCOPY = ${CROSS}objcopy
 SIZE = ${CROSS}size
 
 # use these on the $(LD) line, as needed:
-LIBM = ${shell ${CC} ${CFLAGS} --print-file-name=libm.a}
-LIBC = ${shell ${CC} ${CFLAGS} --print-file-name=libc.a}
-LIBGCC = ${shell ${CC} ${CFLAGS} --print-libgcc-file-name}
+LIBM = "${shell ${CC} ${CFLAGS} --print-file-name=libm.a}"
+LIBC = "${shell ${CC} ${CFLAGS} --print-file-name=libc.a}"
+LIBGCC = "${shell ${CC} ${CFLAGS} --print-libgcc-file-name}"
 
 CFLAGS += $(CPU) $(FPU)
 LDFLAGS += --gc-sections
