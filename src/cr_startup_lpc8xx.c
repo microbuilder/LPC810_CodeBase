@@ -54,6 +54,8 @@ extern "C" {
 extern "C" {
 #endif
 
+int main(void);
+
 //*****************************************************************************
 //
 // Forward declaration of the default handlers. These are aliased.

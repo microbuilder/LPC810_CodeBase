@@ -28,6 +28,8 @@ static unsigned int StackMem[STACKSIZE];
 #define WEAK __attribute__ ((weak))
 #define ALIAS(f) __attribute__ ((weak, alias (#f)))
 
+int main(void);
+
 //*****************************************************************************
 //
 // Forward declaration of the default handlers. These are aliased.
