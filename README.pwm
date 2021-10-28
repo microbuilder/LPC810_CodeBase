@@ -1,0 +1,7 @@
+README.pwm
+
+this example demonstrates how to setup the LPC810 SCT function to generate a PWM signal.
+The led (pio0_2) is used to output the PWM signal visually.
+The input pin pio0_1 (ISP-button on LPC800 minikit) allows to change the duty cycle.
+
+
